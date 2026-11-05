@@ -1,2 +1,77 @@
-# squeek-grove
-Squeek Grove · 仓鼠花园 — a bilingual gardening game inspired by Squeektoshi's real wheel activity. Plant, irrigate, harvest and deliver orders. No wallet required.
+# Squeek Grove · 仓鼠花园
+
+**v2.0 — wheel irrigation, a harvest warehouse and timed delivery orders.**
+
+An independent bilingual gardening game by Muguang (沐光), designed around Squeektoshi’s real wheel activity. Players allocate stored wheel energy to individual crops, choose what to sell, and plan crop combinations for delivery orders.
+
+![Squeek Grove](docs/garden-preview.jpg)
+
+## Play
+
+1. Choose one of four seeds and plant it in an empty plot. Three plots are unlocked initially; six more can be purchased with game coins. Two welcome seedlings are included.
+2. Irrigate before maturity: one dew adds 25% growth; **four stored wheel energy adds 35% and turns that plant into a wheel-grown crop**. Each type can be used once per plant.
+3. Harvest into the warehouse and earn XP. Harvesting no longer pays coins immediately. Sell the crop, or reserve it for a delivery. Wheel-grown crops sell for 1.5× the regular price, rounded down.
+4. Accept one of six orders. The deadline starts after confirmation and continues while the page is closed. Standard orders accept either quality; wheel deliveries require wheel-grown crops. Review exact deductions before confirming delivery.
+5. Use delivery coins and XP to expand, unlock species and decorate. Expired or cancelled orders keep all plants and inventory.
+
+Crops take 45–240 seconds. Dew refills every 45 seconds, up to six. All standard orders can be grown on three plots within their deadline without wheel energy. Stored energy remains usable during idle periods or disconnections. The game also includes Chinese/English interfaces, keyboard/touch controls, reduced motion, validated save import/export, a seed journal, milestones and PNG postcard export. No wallet, payment or signature is required.
+
+## Squeekchain integration
+
+**Physical wheel work → stored irrigation energy → a chosen crop → wheel-grown stock → special deliveries.**
+
+- Source: the public [`/v1/status` API](https://api.squeekchain.com/v1/status), schema version 1. [Official API documentation](https://docs.squeekchain.com/developers/api/).
+- Visible pages poll every 15 seconds, with a 10-second timeout and at least 60-second backoff after errors. HTTP 429 respects numeric Retry-After seconds.
+- Consecutive fresh hardware `measurement.cumulativeWorkUnits` readings within the same installation/counter epoch earn one energy per five new work units. Energy is capped at 100. An interval counts at most 500 units for game balance.
+- First connections, visibility resumes, gaps over 90 seconds, stale/non-hardware/fault readings, changed epochs and backwards counters establish a baseline without catch-up rewards. No simulated live-data fallback.
+- The latest eight local reading intervals show source counters, counted work, energy added and available settled height. This is local game accounting, not an onchain certificate.
+- RPM uses `measurement.rpmMilli / 1000`; settled height uses `builder.anchor.blockHeight`. Sunny garden weather is illustration.
+- Ordinary gardening and standard orders remain available when the API or wheel is unavailable. Energy accumulates only while the page is visible and receiving valid consecutive readings.
+
+## Run
+
+Serve `dist/` over HTTP; do not double-click `index.html`. No dependency installation or build is needed.
+
+```sh
+python3 -m http.server 8080 --directory dist
+```
+
+Open `http://localhost:8080`. Optional Google fonts have system-font fallbacks. All artwork is original SVG/CSS included in the source.
+
+## GitHub upload and hosting
+
+See **[GITHUB_UPLOAD.md](GITHUB_UPLOAD.md)** for Chinese steps. Upload extracted source files, not the ZIP. The included Pages workflow publishes `dist/` after pushes to `main`; enable GitHub Actions as the Pages source first. Relative asset URLs support repository subpaths.
+
+A playable hosted game and a public source repository are separate deliverables. Final Squeekchain direct submission also requires an eligible domain and ownership verification through the current official form. This source contains no issued verification token or IMD job ID.
+
+## Verification
+
+With Node.js 22 or later:
+
+```sh
+npm run check
+```
+
+The 23 tests cover spending, inventory, exact order deductions, quality requirements, expiry, cancellation, stale confirmations, migration, irrigation and live-data accounting. [VALIDATION.md](VALIDATION.md) records the checks actually performed and their limits.
+
+| File | Purpose |
+| --- | --- |
+| `dist/engine.mjs` | Game rules, orders, saves and API interpretation |
+| `dist/orders.mjs` | Warehouse and order views |
+| `dist/app.mjs` | UI, polling, saves and postcard export |
+| `dist/art.mjs`, `dist/styles.css` | Original artwork and responsive styling |
+| `tests/engine.test.mjs` | Regression tests |
+| `.github/workflows/pages.yml` | GitHub Pages deployment |
+| `SUBMISSION.md` | Project description and review walkthrough |
+
+## Existing saves and data limits
+
+The app loads `squeek-grove-save-v2` from localStorage, or migrates a valid `squeek-grove-save-v1` if no v2 save exists. The older key is retained. Existing coins, XP, plants, growth boosts, water, energy, collections, goals and decoration remain. Old harvests already paid coins, so they are not duplicated into the new warehouse. Legacy crops start with regular quality. Version 1 JSON backups can also be imported.
+
+Moving from the preview to GitHub Pages or a new domain changes the browser origin: **export the save on the old site, then import it on the new one**. Browser-local saves do not move across domains automatically. Back up before clearing browser data.
+
+This is a single-player game with editable local saves, no cloud saves, global leaderboard, wallet calls, token rewards or official badge issuance. Game resources have no onchain value. Squeek Grove is an independent community project and is not endorsed by Squeekchain. Approval is a separate review.
+
+## Ownership verification
+
+When available, add the exact DNS TXT record, page meta tag and README ownership line supplied by the official verification form. Do not invent tokens. The initial owner-private preview is not the final public submission URL.
