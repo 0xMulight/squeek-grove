@@ -86,4 +86,6 @@ This is a single-player game with editable local saves, no cloud saves, global l
 
 ## Ownership verification
 
-When available, add the exact DNS TXT record, page meta tag and README ownership line supplied by the official verification form. Do not invent tokens. The initial owner-private preview is not the final public submission URL.
+squeekchain-project: bae8bfba-7591-4504-b9b5-6dded38a0ba9
+
+Official Squeekchain Direct submission for project `bae8bfba-7591-4504-b9b5-6dded38a0ba9` on `mulpx.com`. Keep the issued DNS TXT (`_squeekchain`) and the page meta tag in place; they are rechecked daily.
