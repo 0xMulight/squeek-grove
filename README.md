@@ -1,5 +1,17 @@
 # Squeek Grove · 仓鼠花园
 
+**[在线试玩 / Play now](https://0xmulight.github.io/squeek-grove/)** — 免费打开，无需登录、钱包或签名。
+
+## 中文快速上手
+
+1. 初始有 40 种子币、3 块已开垦土地和 2 株迎新幼苗。选择「甜心胡萝卜」，在第三块空地补种一株。
+2. 在「订单仓库」接「树下的野餐篮」：需要 2 个胡萝卜和 1 朵雏菊，确认后限时 3 分钟。
+3. 选中生长中的植物，用露水浇灌可增加 25% 成长。成熟后点击「收获成熟植物」，收成先入仓，不会自动出售。
+4. 凑齐后查看交付明细并确认，获得 76 种子币和 20 XP。收成也可在仓库单独出售；准备交单的先留着。
+5. 有 4 点跑轮能量时，可灌溉指定的一株植物，增加 35% 成长并培育跑轮作物。跑轮专送只收这种品质；普通订单无需跑轮能量。
+
+跑轮能量只在页面处于前台、连续收到有效硬件活动数据时积累。跑轮静止或断线时仍能种植；已经储存的能量可以继续使用。进度保存在当前浏览器，换设备或域名前请在「存档与设置」导出、导入存档。游戏资源没有链上价值。
+
 **v2.0 — wheel irrigation, a harvest warehouse and timed delivery orders.**
 
 An independent bilingual gardening game by Muguang (沐光), designed around Squeektoshi’s real wheel activity. Players allocate stored wheel energy to individual crops, choose what to sell, and plan crop combinations for delivery orders.
