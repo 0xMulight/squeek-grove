@@ -34,6 +34,12 @@ Crops take 45–240 seconds. Dew refills every 45 seconds, up to six. All standa
 
 An original 16-bar, 84 BPM melody is synthesized locally with Web Audio. Use the header music-note button to play/pause, and adjust volume in settings. Music defaults to on at each page load and attempts autoplay. If the browser requires user activation, the first normal click, tap or key interaction starts playback. Pause/play remains available, volume is remembered, and hidden pages pause automatically. No third-party audio files, player embeds or audio downloads are needed.
 
+## Game sounds / 操作音效
+
+播种、露水浇灌、跑轮灌溉、收获、出售、接单、交付、开垦、领奖和升级都有简短音效。仅在操作成功后播放；一键收获只响一次，快速连续点击会限制叠音。音效初次默认开启，在「存档与设置」可独立开关、调音量或试听，偏好保存在当前浏览器。暂停背景音乐不影响音效，关闭音效也不影响音乐。
+
+Original effects are synthesized locally on successful game actions. Effects have independent, saved enable/volume controls and a preview button. Batch harvests use one cue; rapid taps and simultaneous voices are limited. Hidden pages stop effects, and blocked or delayed audio is discarded rather than replayed later. No external sound files or network requests are needed.
+
 ## Squeekchain integration
 
 **Physical wheel work → stored irrigation energy → a chosen crop → wheel-grown stock → special deliveries.**
@@ -77,6 +83,7 @@ The 23 tests cover spending, inventory, exact order deductions, quality requirem
 | `dist/engine.mjs` | Game rules, orders, saves and API interpretation |
 | `dist/orders.mjs` | Warehouse and order views |
 | `dist/app.mjs` | UI, polling, saves and postcard export |
+| `dist/music.mjs`, `dist/sounds.mjs` | Original background score and action effects |
 | `dist/art.mjs`, `dist/styles.css` | Original artwork and responsive styling |
 | `tests/engine.test.mjs` | Regression tests |
 | `.github/workflows/pages.yml` | GitHub Pages deployment |
