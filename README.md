@@ -28,6 +28,12 @@ An independent bilingual gardening game by Muguang (沐光), designed around Squ
 
 Crops take 45–240 seconds. Dew refills every 45 seconds, up to six. All standard orders can be grown on three plots within their deadline without wheel energy. Stored energy remains usable during idle periods or disconnections. The game also includes Chinese/English interfaces, keyboard/touch controls, reduced motion, validated save import/export, a seed journal, milestones and PNG postcard export. No wallet, payment or signature is required.
 
+## Background music / 背景音乐
+
+点击右上角音符开启「花园小调」，再次点击暂停；在「存档与设置」调整音量。首次访问默认静音，之后记住开关与音量，点击页面后恢复。切到后台自动暂停。音乐设置单独保存，不改变花园存档。
+
+An original 16-bar, 84 BPM melody is synthesized locally with Web Audio. Use the header music-note button to play/pause, and adjust volume in settings. First visits are silent; remembered playback resumes after a user gesture. Hidden pages pause automatically. No third-party audio files, player embeds or audio downloads are needed.
+
 ## Squeekchain integration
 
 **Physical wheel work → stored irrigation energy → a chosen crop → wheel-grown stock → special deliveries.**
