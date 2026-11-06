@@ -1,7 +1,7 @@
 import {SEEDS,LEVELS,QUESTS,WATER_INTERVAL,WATER_MAX,freshState,levelOf,seedById,progressOf,tick,applyAction,validateSave,readStatus,accrueEnergy,IRRIGATION_COST,ORDERS,orderById,deliveryPlan} from './engine.mjs';
 import {icon,hamster,plantArt,gardenScenery} from './art.mjs';
 import {ordersView,activeOrderHTML,orderNeeds} from './orders.mjs';
-import {createGardenMusic} from './music.mjs';
+import {createGardenMusic} from './music.mjs?v=20261106-autoplay';
 
 const STORAGE='squeek-grove-save-v2',LANG='squeek-grove-language',API='https://api.squeekchain.com/v1/status';
 let state,lang='zh',storageOK=true,loadWarning=false,migrated=false;
@@ -21,11 +21,11 @@ function save(){
 }
 function toast(message){clearTimeout(toastTimer);const el=document.querySelector('#toast');el.textContent=message;el.classList.add('show');toastTimer=setTimeout(()=>el.classList.remove('show'),3300);}
 const musicIcon='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13M9 9l12-2"/><ellipse cx="6" cy="18" rx="3" ry="2.5"/><ellipse cx="18" cy="16" rx="3" ry="2.5"/></svg>';
-function musicLabel(){return !music.supported?t('此浏览器不支持音乐','Music unavailable'):music.starting?t('音乐准备中','Starting music'):music.playing?t('暂停音乐','Pause music'):t('播放音乐','Play music');}
-function musicButton(settingsButton=false){return `<button class="${settingsButton?'secondary-button':'icon-button'} music-toggle ${music.playing?'is-playing':''}" data-action="music-toggle" aria-label="${musicLabel()}" aria-pressed="${music.playing}" title="${musicLabel()}" ${!music.supported||music.starting?'disabled':''}>${musicIcon}${settingsButton?`<span data-music-label>${musicLabel()}</span>`:''}</button>`;}
-function musicSettings(){return `<section class="music-settings" aria-label="${t('背景音乐','Background music')}"><div class="music-settings-top"><div><h3>${t('花园小调','A Little Sunny Garden')}</h3><p>${t('轻柔的循环旋律，陪你慢慢种植。','A gentle little melody to grow along with.')}</p></div>${musicButton(true)}</div><div class="music-volume-row"><label for="music-volume">${t('音乐音量','Music volume')}</label><input id="music-volume" type="range" min="0" max="100" step="1" value="${music.volume}" aria-valuetext="${music.volume}%"><output id="music-volume-value" for="music-volume">${music.volume}%</output></div><p class="music-hint">${t('记住播放偏好与音量；切到后台会暂停。','Remembers your preference and volume; pauses in the background.')}</p></section>`;}
+function musicLabel(){return !music.supported?t('此浏览器不支持音乐','Music unavailable'):music.enabled?(music.playing?t('暂停音乐','Pause music'):t('关闭音乐','Turn music off')):t('播放音乐','Play music');}
+function musicButton(settingsButton=false){return `<button class="${settingsButton?'secondary-button':'icon-button'} music-toggle ${music.enabled?'is-playing':''}" data-action="music-toggle" aria-label="${musicLabel()}" aria-pressed="${music.enabled}" title="${musicLabel()}" ${!music.supported?'disabled':''}>${musicIcon}${settingsButton?`<span data-music-label>${musicLabel()}</span>`:''}</button>`;}
+function musicSettings(){return `<section class="music-settings" aria-label="${t('背景音乐','Background music')}"><div class="music-settings-top"><div><h3>${t('花园小调','A Little Sunny Garden')}</h3><p>${t('轻柔的循环旋律，陪你慢慢种植。','A gentle little melody to grow along with.')}</p></div>${musicButton(true)}</div><div class="music-volume-row"><label for="music-volume">${t('音乐音量','Music volume')}</label><input id="music-volume" type="range" min="0" max="100" step="1" value="${music.volume}" aria-valuetext="${music.volume}%"><output id="music-volume-value" for="music-volume">${music.volume}%</output></div><p class="music-hint">${t('进入花园自动播放；若暂时无声，点一下页面即可。','Music starts on entry. If it is silent, tap anywhere to begin.')}</p></section>`;}
 function updateMusicControls(){
- document.querySelectorAll('[data-action="music-toggle"]').forEach(button=>{button.setAttribute('aria-pressed',String(music.playing));button.setAttribute('aria-label',musicLabel());button.title=musicLabel();button.disabled=!music.supported||music.starting;button.classList.toggle('is-playing',music.playing);const label=button.querySelector('[data-music-label]');if(label)label.textContent=musicLabel();});
+ document.querySelectorAll('[data-action="music-toggle"]').forEach(button=>{button.setAttribute('aria-pressed',String(music.enabled));button.setAttribute('aria-label',musicLabel());button.title=musicLabel();button.disabled=!music.supported;button.classList.toggle('is-playing',music.enabled);const label=button.querySelector('[data-music-label]');if(label)label.textContent=musicLabel();});
  const slider=document.querySelector('#music-volume');if(slider){slider.value=music.volume;slider.setAttribute('aria-valuetext',music.volume+'%');}
  const output=document.querySelector('#music-volume-value');if(output)output.textContent=music.volume+'%';
 }
@@ -155,7 +155,7 @@ document.querySelector('#import-file').addEventListener('change',async e=>{const
 window.addEventListener('storage',e=>{if(e.key===STORAGE&&e.newValue){try{state=validateSave(JSON.parse(e.newValue));render();toast(t('已同步另一个页面的最新进度。','Progress updated from another tab.'));}catch(e){}}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)save();else{tick(state);render();lastSample=null;workRemainder=0;poll();}});
 window.addEventListener('pagehide',save);
-render();save();poll();
+render();save();music.start();poll();
 setInterval(()=>{updateStats();if(view==='garden'){renderPlots();renderFocus();renderLive();}},1000);
 saveTimer=setInterval(save,10000);
 if(loadWarning)setTimeout(()=>toast(t('没有读到有效存档，已创建新花园。可在设置里导入备份。','No valid save found. A new garden is ready; you can import a backup in settings.')),700);

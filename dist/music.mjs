@@ -20,16 +20,15 @@ const CHORDS = [
 ];
 
 export function createGardenMusic(onChange = () => {}) {
-  let enabled = false, volume = 40;
+  let enabled = true, volume = 40;
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE));
-    enabled = saved?.enabled === true;
     if (Number.isFinite(saved?.volume)) volume = Math.max(0, Math.min(100, saved.volume));
   } catch { /* Music remains usable without browser storage. */ }
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   let context, master, voiceBus, timer, nextTime = 0, step = 0;
-  let playing = false, starting = false, revision = 0;
-  const persist = () => { try { localStorage.setItem(STORAGE, JSON.stringify({enabled, volume})); } catch {} };
+  let playing = false;
+  const persist = () => { try { localStorage.setItem(STORAGE, JSON.stringify({volume})); } catch {} };
   const notify = () => onChange();
   const clearScheduler = () => { clearInterval(timer); timer = null; };
 
@@ -49,9 +48,7 @@ export function createGardenMusic(onChange = () => {}) {
     voiceBus.connect(delay);
     delay.connect(echo);
     echo.connect(master);
-    context.addEventListener('statechange', () => {
-      if (context.state !== 'running') { playing = false; clearScheduler(); notify(); }
-    });
+    context.addEventListener('statechange', syncPlayback);
   }
 
   function note(midi, time, duration, gain, type = 'sine') {
@@ -86,30 +83,41 @@ export function createGardenMusic(onChange = () => {}) {
     }
   }
 
-  async function start() {
-    if (!enabled || document.hidden || playing || starting) return true;
-    if (!AudioContext) return false;
-    const request = ++revision;
-    starting = true;
-    notify();
-    try {
-      setup();
-      await context.resume();
-      if (request !== revision || !enabled || document.hidden || context.state !== 'running') return false;
+  function syncPlayback() {
+    if (!context) return;
+    if (!enabled || document.hidden || context.state !== 'running') {
+      playing = false;
+      clearScheduler();
+      if (context.state === 'running') {
+        master.gain.cancelScheduledValues(context.currentTime);
+        master.gain.setValueAtTime(0, context.currentTime);
+        void context.suspend().catch(() => {});
+      }
+    } else if (!playing) {
       master.gain.setTargetAtTime(volume / 100 * 0.55, context.currentTime, 0.08);
       nextTime = Math.max(nextTime, context.currentTime + 0.05);
       clearScheduler();
       schedule();
       timer = setInterval(schedule, 100);
       playing = true;
+    }
+    notify();
+  }
+
+  function start() {
+    if (!enabled || document.hidden || playing) return true;
+    if (!AudioContext) return false;
+    try {
+      setup();
+      // resume() may stay pending until a user gesture. Never block the controls
+      // or prevent a fresh resume() inside the first click/tap/key interaction.
+      void context.resume().then(syncPlayback, notify);
+      syncPlayback();
       return true;
-    } catch { return false; }
-    finally { if (request === revision) starting = false; notify(); }
+    } catch { notify(); return false; }
   }
 
   function pause() {
-    revision++;
-    starting = false;
     playing = false;
     clearScheduler();
     if (context) {
@@ -120,13 +128,14 @@ export function createGardenMusic(onChange = () => {}) {
     notify();
   }
 
-  // A remembered preference resumes only after an actual user interaction.
+  // Try on entry; if autoplay is blocked, the first normal interaction unlocks it.
   function resumeFromGesture(event) {
     if (event.target?.closest?.('[data-action="music-toggle"]')) return;
-    if (event.type === 'keydown' && !['Enter', ' '].includes(event.key)) return;
-    if (enabled && !playing && !starting) void start();
+    if (event.type === 'keydown' && (event.repeat || ['Shift', 'Control', 'Alt', 'Meta', 'Escape'].includes(event.key))) return;
+    if (enabled && !playing) start();
   }
   document.addEventListener('pointerdown', resumeFromGesture);
+  document.addEventListener('click', resumeFromGesture);
   document.addEventListener('keydown', resumeFromGesture);
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) pause();
@@ -137,13 +146,13 @@ export function createGardenMusic(onChange = () => {}) {
 
   return {
     get playing() { return playing; },
-    get starting() { return starting; },
+    get enabled() { return enabled; },
+    start,
     get supported() { return Boolean(AudioContext); },
     get volume() { return volume; },
-    async toggle() {
-      if (playing || starting) { enabled = false; persist(); pause(); return true; }
+    toggle() {
+      if (enabled) { enabled = false; pause(); return true; }
       enabled = true;
-      persist();
       return start();
     },
     setVolume(value) {

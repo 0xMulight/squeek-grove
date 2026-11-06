@@ -30,9 +30,9 @@ Crops take 45–240 seconds. Dew refills every 45 seconds, up to six. All standa
 
 ## Background music / 背景音乐
 
-点击右上角音符开启「花园小调」，再次点击暂停；在「存档与设置」调整音量。首次访问默认静音，之后记住开关与音量，点击页面后恢复。切到后台自动暂停。音乐设置单独保存，不改变花园存档。
+每次进入花园都会默认开启「花园小调」。浏览器允许时直接播放；如果自动播放被限制，第一次点击、触摸或按键时会自动开始，无需专门点击音乐按钮。右上角音符可随时暂停或继续，在「存档与设置」调整音量。记住音量，切到后台自动暂停。音乐设置单独保存，不改变花园存档。
 
-An original 16-bar, 84 BPM melody is synthesized locally with Web Audio. Use the header music-note button to play/pause, and adjust volume in settings. First visits are silent; remembered playback resumes after a user gesture. Hidden pages pause automatically. No third-party audio files, player embeds or audio downloads are needed.
+An original 16-bar, 84 BPM melody is synthesized locally with Web Audio. Use the header music-note button to play/pause, and adjust volume in settings. Music defaults to on at each page load and attempts autoplay. If the browser requires user activation, the first normal click, tap or key interaction starts playback. Pause/play remains available, volume is remembered, and hidden pages pause automatically. No third-party audio files, player embeds or audio downloads are needed.
 
 ## Squeekchain integration
 
