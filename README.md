@@ -1,6 +1,6 @@
 # Squeek Grove · 仓鼠花园
 
-**[在线试玩 / Play now](https://0xmulight.github.io/squeek-grove/)** — 免费打开，无需登录、钱包或签名。
+**[在线试玩 / Play now](https://mulpx.com/)** — 免费打开，无需登录、钱包或签名。
 
 ## 中文快速上手
 
@@ -40,6 +40,12 @@ An original 16-bar, 84 BPM melody is synthesized locally with Web Audio. Use the
 
 Original effects are synthesized locally on successful game actions. Effects have independent, saved enable/volume controls and a preview button. Batch harvests use one cue; rapid taps and simultaneous voices are limited. Hidden pages stop effects, and blocked or delayed audio is discarded rather than replayed later. No external sound files or network requests are needed.
 
+## A living garden / 花园时光
+
+花园可跟随设备当地时间切换日光（06:00–17:00）、落日（17:00–19:00）和星夜，也可手动选择。轻触仓鼠，会回应互动、提示成熟地块或订单缺少的作物。播种有落籽动画，浇水有水滴与湿润土壤，收获会飞进可以打开仓库的收成篮。植物有四个视觉成长阶段。
+
+The illustrated garden follows local time, with optional Day / Dusk / Night overrides. Pet the hamster for reactions and contextual harvest or order reminders. Seeds drop into soil, watered plots stay darker, and harvested crops fly into the warehouse basket. Clouds, foliage, fireflies and the companion animate gently. Lighting and motion preferences are saved independently of game progress; the motion switch and the system’s reduced-motion preference disable these animations. Lighting is decorative and does not alter crop timers or rewards.
+
 ## Squeekchain integration
 
 **Physical wheel work → stored irrigation energy → a chosen crop → wheel-grown stock → special deliveries.**
@@ -49,7 +55,7 @@ Original effects are synthesized locally on successful game actions. Effects hav
 - Consecutive fresh hardware `measurement.cumulativeWorkUnits` readings within the same installation/counter epoch earn one energy per five new work units. Energy is capped at 100. An interval counts at most 500 units for game balance.
 - First connections, visibility resumes, gaps over 90 seconds, stale/non-hardware/fault readings, changed epochs and backwards counters establish a baseline without catch-up rewards. No simulated live-data fallback.
 - The latest eight local reading intervals show source counters, counted work, energy added and available settled height. This is local game accounting, not an onchain certificate.
-- RPM uses `measurement.rpmMilli / 1000`; settled height uses `builder.anchor.blockHeight`. Sunny garden weather is illustration.
+- RPM uses `measurement.rpmMilli / 1000`; settled height uses `builder.anchor.blockHeight`. Garden lighting is an illustration based on local time or the chosen scene.
 - Ordinary gardening and standard orders remain available when the API or wheel is unavailable. Energy accumulates only while the page is visible and receiving valid consecutive readings.
 
 ## Run
@@ -85,6 +91,7 @@ The 23 tests cover spending, inventory, exact order deductions, quality requirem
 | `dist/app.mjs` | UI, polling, saves and postcard export |
 | `dist/music.mjs`, `dist/sounds.mjs` | Original background score and action effects |
 | `dist/art.mjs`, `dist/styles.css` | Original artwork and responsive styling |
+| `dist/garden-life.mjs`, `dist/garden-life.css` | Local-time lighting, companion hints and action animations |
 | `tests/engine.test.mjs` | Regression tests |
 | `.github/workflows/pages.yml` | GitHub Pages deployment |
 | `SUBMISSION.md` | Project description and review walkthrough |

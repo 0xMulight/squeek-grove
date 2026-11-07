@@ -1,0 +1,131 @@
+/* A quieter, more tactile garden. Scene colors stay inside the illustration. */
+:root{--muted:#65755e;--line:#dbe1d0}
+.intro p,.garden-note,.collection-intro{color:#697b61}
+.resource-label,.save-state,.seed-section .section-head>span,.footer{color:#6f7b63}
+.focus-copy p,.panel-empty,.live-subtitle,.quest-hint{color:#6c7d60}
+.seed-name,.focus-copy h3{color:#3d583b}
+.primary-button{font-weight:500;box-shadow:0 3px 0 #243e3020;transition:background .18s,transform .18s,box-shadow .18s}
+.primary-button:active:not(:disabled){transform:translateY(1px);box-shadow:none}
+.secondary-button:hover:not(:disabled){background:#eaf0df;border-color:#a5b995}
+.garden-card{box-shadow:0 10px 32px #3f5a3810;--sky-top:#e8efda;--sky-bottom:#dce7c7;--lawn-top:#c6d5a0;--lawn-bottom:#b3c68d;--far-hill:#c4d6b4;--horizon:#a5bc8d;--path-edge:#dce0b8;--garden-path:#e6e7c5;--fence:#ecebd4;--fence-edge:#b7bda0;--tree-dark:#83a779;--tree-mid:#90b080;--tree-light:#9bb787;--tree-top:#a7c08f;--bush:#a2b783;--pebbles:#e6e4ca;--soil-a:#b69971;--soil-b:#c2a77e;--soil-edge:#d3bb8b;--wet-a:#8e795a;--wet-b:#a48b64;--lamp-fill:#dfd9b5}
+.garden-card[data-scene=dusk]{--sky-top:#eac1ab;--sky-bottom:#eee1bc;--lawn-top:#c7ca9e;--lawn-bottom:#aeb98a;--far-hill:#cabf9e;--horizon:#a4af7e;--path-edge:#d7c6a1;--garden-path:#e8d6b2;--fence:#eee0bb;--tree-dark:#8c9b69;--tree-mid:#a1ac7c;--tree-light:#b5b882;--tree-top:#c3c28a;--bush:#a2b184;--pebbles:#e3d1af;--lamp-fill:#ffe6a5}
+.garden-card[data-scene=night]{--sky-top:#263d4b;--sky-bottom:#496b6e;--lawn-top:#6f8a73;--lawn-bottom:#4c705e;--far-hill:#496e66;--horizon:#61806a;--path-edge:#81967b;--garden-path:#a2b194;--fence:#c7cfb0;--fence-edge:#798c76;--tree-dark:#486d5a;--tree-mid:#557b63;--tree-light:#68856a;--tree-top:#809777;--bush:#63846b;--pebbles:#b8c2a6;--soil-a:#8f795c;--soil-b:#a18b69;--soil-edge:#b5a27a;--wet-a:#6e6451;--wet-b:#7e7358;--lamp-fill:#ffe5a0}
+.garden-scene-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 22px;background:#fafbf3;border-bottom:1px solid #dde4cf}
+.scene-bar-title{font-size:10px;color:#6e805f;display:flex;align-items:center;gap:6px;letter-spacing:.8px;white-space:nowrap}
+.scene-switch{display:flex;padding:3px;border:1px solid #dfe5d3;border-radius:20px;background:#eff3e6;gap:2px}
+.scene-switch button{padding:6px 13px;border-radius:14px;font-size:10px;color:#6c7d5f;min-height:28px;white-space:nowrap;transition:background .2s,color .2s,box-shadow .2s}
+.scene-switch button[aria-pressed=true]{background:#fffef7;box-shadow:0 2px 5px #4a643317;color:#3b5c37;font-weight:600}
+.scene-switch button:hover{color:#2f5334}
+.motion-switch{font-size:10px;white-space:nowrap;color:#738267;padding:7px 0 7px 7px;display:flex;align-items:center;gap:6px}
+.motion-switch span{padding:2px 5px;background:#e8eddd;border-radius:5px;color:#4e6c43;font-size:9px}
+.motion-switch[aria-pressed=false] span{background:#e7e8df;color:#7e8375}
+.garden-world{height:530px;background:var(--lawn-bottom);transition:background .8s}
+.scenery{pointer-events:none}
+.scenery path,.scenery rect,.scenery circle,.scenery ellipse,.scenery stop{transition:fill .8s,stop-color .8s,stroke .8s}
+.scene-moon,.scene-stars,.lamp-glow{opacity:0;transition:opacity .8s}
+.scene-sun{transition:opacity .8s,transform .8s}
+[data-scene=dusk] .scene-sun{transform:translateY(40px)}
+[data-scene=dusk] .scene-sun>circle:first-child{fill:#ffdfab}
+[data-scene=night] .scene-sun{opacity:0}
+[data-scene=night] .scene-moon,[data-scene=night] .scene-stars,[data-scene=night] .lamp-glow,[data-scene=dusk] .lamp-glow{opacity:1}
+.scene-cloud{animation:cloud-drift 34s ease-in-out infinite alternate}
+.cloud-two{animation-duration:46s;animation-direction:alternate-reverse}
+[data-scene=night] .scene-cloud{opacity:.12}
+.scene-tree{transform-origin:88% 36%;animation:tree-sway 9s ease-in-out infinite}
+.garden-ambience{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.sunbeam{position:absolute;inset:0;opacity:.16;background:linear-gradient(124deg,transparent 30%,#fff9d9 31%,transparent 52%);transition:opacity .8s}
+[data-scene=dusk] .sunbeam{opacity:.27;background:linear-gradient(113deg,transparent 20%,#ffe2ad 21%,transparent 65%)}
+[data-scene=night] .sunbeam{opacity:0}
+.firefly{position:absolute;width:3px;height:3px;background:#fcf5bd;border-radius:50%;box-shadow:0 0 8px 3px #fff6b24a;opacity:0;display:none}
+[data-scene=night] .firefly,[data-scene=dusk] .firefly{display:block;animation:firefly-drift calc(4s + var(--i)*.6s) ease-in-out infinite;animation-delay:calc(var(--i)*-.8s)}
+[data-scene=dusk] .firefly{width:2px;height:2px;box-shadow:none}
+.drifting-leaf{position:absolute;width:10px;height:5px;border-radius:9px 0 9px 0;background:#8da969;opacity:0;animation:leaf-drift 16s ease-in-out infinite}
+.leaf-one{top:10%;left:74%}.leaf-two{top:19%;left:14%;animation-delay:-8s;animation-duration:22s}
+[data-scene=night] .drifting-leaf{display:none}
+.world-sign{font-size:10px;color:#526b47;background:#ffffedf0;border-color:#fff5;box-shadow:0 2px 6px #4054340b}
+.world-weather{display:flex;gap:8px;align-items:center;top:21px;color:#526b47;padding:7px 11px;background:#f8fae8c9;border-radius:12px;backdrop-filter:blur(4px)}
+.world-weather b{font-size:11px;font-weight:500;display:block;line-height:1.5}.world-weather small{display:block;font-size:7px;letter-spacing:1.3px;opacity:.7;margin-top:1px}
+.scene-phase-dot{width:15px;height:15px;display:block;border-radius:50%;background:#eec87c;box-shadow:0 0 0 4px #f0d99538}
+[data-scene=night] .scene-phase-dot{background:#f3e6b2;box-shadow:inset -5px -2px 0 #90a181}
+[data-scene=night] .world-sign,[data-scene=night] .world-weather{background:#dce7cce8;color:#365542}
+.plot-grid{top:46%;z-index:2}
+.plot:before{background:repeating-linear-gradient(10deg,var(--soil-a) 0,var(--soil-a) 2px,var(--soil-b) 3px,var(--soil-b) 13px);border-color:var(--soil-edge);box-shadow:0 6px 0 #42543b28,inset 0 0 0 2px #7963412b;transition:background .5s,border-color .5s,box-shadow .3s}
+.plot[data-watered=true]:before{background:repeating-linear-gradient(10deg,var(--wet-a) 0,var(--wet-a) 2px,var(--wet-b) 3px,var(--wet-b) 13px)}
+.plot.locked:before{background:color-mix(in srgb,var(--lawn-bottom) 80%,#6f8d59);border-color:#5d7d5359;box-shadow:inset 0 2px 3px #526c3f0a}
+.plot.locked .plot-label{color:#3f6246;opacity:1}
+[data-scene=night] .plot.locked .plot-label,[data-scene=night] .plot.locked .plot-icon{color:#c2d1b7}
+.plot.selected:before{outline-color:#fff4cd;box-shadow:0 6px 0 #42543b28,0 0 18px #fff3c13b}
+.plot-label{font-size:10px;color:#fff8df;background:#665c46df;box-shadow:0 1px 2px #382e2814}
+.plot.empty .plot-label{color:#594c36;background:#ebd6a7eb}
+.plant-visual{filter:drop-shadow(2px 5px 2px #3b543238);transform-origin:50% 95%}
+.plant-visual svg{animation:crop-breathe 6s ease-in-out infinite;transform-origin:50% 90%}
+.plot:nth-child(2n) .plant-visual svg{animation-delay:-2.5s}
+.crop-ready .plant-visual{filter:drop-shadow(1px 3px 2px #37533233) drop-shadow(0 0 4px #fff8b755)}
+.crop-ready:after{content:'✦';position:absolute;top:9px;right:22px;font-size:14px;color:#fff8c9;pointer-events:none;text-shadow:0 0 5px #e1c466;animation:ripe-sparkle 3.7s ease-in-out infinite}
+.ready-bubble{font-size:10px;font-weight:500;background:#fff4c9;color:#5c713b;border:1px solid #d3cb92;box-shadow:0 3px 7px #5067351a}
+[data-scene=night] .plant-visual{filter:drop-shadow(2px 4px 2px #233b3245)}
+.plot[data-effect=plant] .plant-visual{animation:sprout-pop .7s ease-out}
+.plot[data-effect=water]:before{animation:soil-drink 1s ease-out}
+.harvest-basket{position:absolute;bottom:15px;left:34px;width:82px;height:91px;padding:0;z-index:4;border-radius:14px;transition:transform .2s}
+.harvest-basket svg{width:82px;height:70px;filter:drop-shadow(0 3px 1px #52663f16)}
+.harvest-basket:hover{transform:rotate(-4deg) translateY(-2px)}
+.basket-count{position:absolute;right:0;top:15px;min-width:22px;height:22px;display:grid;place-items:center;background:#fff9e5;color:#5a703c;border:1px solid #c6d3ad;border-radius:50%;font:600 10px var(--sans);padding:0 3px}
+.basket-caption{display:block;font-size:9px;letter-spacing:1px;color:#405e40;margin-top:-3px}
+[data-scene=night] .basket-caption{color:#d8e3bf}
+.basket-bounce svg{animation:basket-catch .55s ease-in-out 1}
+.companion-corner{position:absolute;bottom:14px;right:29px;width:112px;height:119px;z-index:4}
+.companion-button{position:relative;width:100%;height:100%;padding:0;border-radius:40%;cursor:pointer;isolation:isolate}
+.companion-art{width:112px;height:105px;overflow:visible;filter:drop-shadow(0 3px 1px #314d2e1a);transform-origin:50% 90%;animation:buddy-breathe 4.3s ease-in-out infinite}
+.companion-button:hover .companion-art{filter:drop-shadow(0 2px 4px #fff8d780)}
+.companion-touch{font-size:9px;display:block;color:#4c6541;letter-spacing:.4px;background:#f8f9e6d9;border:1px solid #c3d0a6;border-radius:10px;padding:3px 8px;width:max-content;margin:-10px auto 0;position:relative}
+.companion-bubble{position:absolute;width:208px;right:118px;bottom:16px;background:#fffef0f0;border:1px solid #c3cda6;border-radius:14px 14px 3px 14px;padding:11px 14px;box-shadow:0 3px 10px #3c573011;pointer-events:none}
+.companion-caption{display:block;font-size:7px;color:#86906c;letter-spacing:1.4px;margin-bottom:4px}
+.companion-bubble p{font-size:11px;line-height:1.7;color:#49633e;margin:0}
+.hamster-sleep-eyes{display:none}
+.companion-art .hamster-eyes{transform-box:fill-box;transform-origin:center;animation:buddy-blink 6.4s infinite}
+.companion-art .hamster-snack{transform-box:fill-box;transform-origin:center;animation:buddy-nibble 9s ease-in-out infinite}
+[data-mood=happy] .companion-art{animation:buddy-hop .65s ease-in-out 2}
+[data-mood=nibble] .hamster-snack{animation:buddy-chew .32s ease-in-out 8}
+[data-mood=sleepy] .hamster-eyes{opacity:0;animation:none}
+[data-mood=sleepy] .hamster-sleep-eyes{display:block;opacity:1}
+[data-mood=sleepy] .hamster-snack{animation:none}
+.sleep-symbol{display:none;position:absolute;right:3px;top:1px;font:italic 16px Georgia;color:#dfe9d3;text-shadow:0 1px 3px #344c38}
+.sleep-symbol span{font-size:11px;position:relative;top:7px;left:4px}
+[data-mood=sleepy] .sleep-symbol{display:block;animation:sleep-rise 3.8s ease-in-out infinite}
+.focus-panel{background:#fffef7}.focus-copy p,.panel-empty{font-size:11px;line-height:1.7}.focus-copy h3{font-size:13px}
+.garden-effect{position:fixed;z-index:80;pointer-events:none;contain:layout style}
+.seed-drop{width:1px;height:1px}.seed-drop i{display:block;position:absolute;width:8px;height:12px;border-radius:70% 30% 70% 30%;background:#c48d4e;border:1px solid #8a623b;animation:seed-fall .62s ease-in both}.seed-drop span{position:absolute;left:-20px;top:5px;width:40px;height:12px;border:2px solid #e9d4a4;border-radius:50%;animation:seed-ripple .7s ease-out both}
+.water-splash{width:1px;height:1px}.water-splash i{position:absolute;left:var(--drop-x);top:-60px;width:4px;height:9px;border-radius:6px 6px 6px 0;background:#b4e6e9;box-shadow:0 0 3px #dff9f7;transform:rotate(15deg);animation:water-drop .6s ease-in both;animation-delay:calc(var(--i)*.045s)}
+.watering-can{position:absolute;top:-84px;left:20px;color:#73b4b8;animation:can-pour .8s ease-in-out both;filter:drop-shadow(0 1px 1px #f4fcf8)}
+.water-ring{position:absolute;width:65px;height:22px;top:4px;left:-32px;border:2px solid #d2f5e3;border-radius:50%;animation:water-ripple .9s ease-out both}
+.charged-splash i{background:#fff1a4;box-shadow:0 0 6px #fff4b6}.charged-splash .watering-can{color:#e1c96a}.charged-splash .water-ring{border-color:#fff0a5}
+.harvest-flight{width:64px;height:64px;opacity:0;animation:harvest-travel .83s cubic-bezier(.33,.02,.52,1) both;animation-delay:var(--flight-delay,0ms);filter:drop-shadow(0 4px 4px #38523226)}
+[data-motion=off] .garden-world *,[data-motion=off] .garden-world *:before,[data-motion=off] .garden-world *:after{animation:none!important;transition:none!important}
+[data-motion=off] .drifting-leaf{display:none}[data-motion=off] .firefly{opacity:.35}[data-motion=off] .crop-ready:after{opacity:.8}
+@keyframes cloud-drift{from{transform:translateX(-15px)}to{transform:translateX(36px)}}
+@keyframes tree-sway{0%,100%{transform:rotate(-.5deg)}50%{transform:rotate(.6deg)}}
+@keyframes firefly-drift{0%,100%{opacity:0;transform:translate(0,0)}35%{opacity:.75}65%{opacity:.4;transform:translate(12px,-16px)}}
+@keyframes leaf-drift{0%,20%{opacity:0;transform:translate(0,0) rotate(0)}30%{opacity:.6}80%{opacity:.5}100%{opacity:0;transform:translate(-110px,140px) rotate(190deg)}}
+@keyframes crop-breathe{0%,100%{transform:rotate(-.5deg)}50%{transform:rotate(1deg)}}
+@keyframes ripe-sparkle{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.1)}}
+@keyframes sprout-pop{0%{opacity:.2;scale:.6}65%{opacity:1;scale:1.08}100%{scale:1}}
+@keyframes soil-drink{20%{box-shadow:0 4px 0 #42543b28,0 0 0 4px #c9eddf70}100%{box-shadow:0 6px 0 #42543b28}}
+@keyframes buddy-breathe{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-2px) rotate(-1deg)}}
+@keyframes buddy-blink{0%,43%,47%,100%{transform:scaleY(1)}45%{transform:scaleY(.08)}}
+@keyframes buddy-nibble{0%,70%,100%{transform:translateY(0)}75%,85%,95%{transform:translateY(-2px)}}
+@keyframes buddy-chew{50%{transform:translateY(-3px) rotate(-3deg)}}
+@keyframes buddy-hop{0%,100%{transform:translateY(0) rotate(-3deg)}42%{transform:translateY(-12px) rotate(4deg)}70%{transform:translateY(0) scale(1.04,.95)}}
+@keyframes sleep-rise{0%,100%{opacity:.25;transform:translateY(0)}60%{opacity:.9;transform:translateY(-7px)}}
+@keyframes basket-catch{50%{transform:translateY(3px) scale(1.07,.94)}}
+@keyframes seed-fall{0%{opacity:0;transform:translate(-2px,-60px) rotate(-25deg)}20%{opacity:1}75%{opacity:1;transform:translate(0,0) rotate(40deg)}100%{opacity:0;transform:translate(0,6px) scale(.5)}}
+@keyframes seed-ripple{0%,60%{opacity:0;transform:scale(.4)}65%{opacity:.9}100%{opacity:0;transform:scale(1.4)}}
+@keyframes water-drop{0%{opacity:0;transform:translateY(0) rotate(15deg)}10%{opacity:1}85%{opacity:.8}100%{opacity:0;transform:translateY(70px) rotate(15deg)}}
+@keyframes can-pour{0%,100%{opacity:0;transform:rotate(-20deg)}25%,70%{opacity:1;transform:rotate(15deg)}}
+@keyframes water-ripple{0%,30%{opacity:0;transform:scale(.3)}40%{opacity:.8}100%{opacity:0;transform:scale(1.3)}}
+@keyframes harvest-travel{0%{opacity:1;transform:translate(0,0) scale(1)}30%{opacity:1;transform:translate(calc(var(--dx)*.25),-65px) scale(1.05) rotate(-10deg)}85%{opacity:1}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.25) rotate(12deg)}}
+@media(min-width:1450px){.garden-world{height:550px}.companion-corner{right:40px}.harvest-basket{left:44px}}
+@media(max-width:1150px){.garden-world{height:510px}.garden-scene-bar{padding:9px 16px;gap:8px}.scene-switch button{padding:6px 10px}.companion-corner{right:14px;width:100px;height:109px}.companion-art{width:100px;height:95px}.companion-bubble{right:104px;width:190px;bottom:13px}.harvest-basket{left:22px;width:73px}.harvest-basket svg{width:73px}}
+@media(max-width:900px){.garden-world{height:480px}.scene-bar-title{display:none}.scene-switch{flex:1;justify-content:space-between}.scene-switch button{flex:1;padding:5px 7px}.plot-grid{top:43%;transform:translate(-50%,-35%)}.companion-corner{width:86px;height:98px;bottom:10px;right:10px}.companion-art{width:86px;height:85px}.companion-bubble{right:91px;width:160px;bottom:10px;padding:9px 11px}.companion-caption{font-size:6px;letter-spacing:.7px}.companion-bubble p{font-size:10px}.harvest-basket{left:15px;bottom:9px;width:63px;height:80px}.harvest-basket svg{width:63px;height:62px}.basket-caption{font-size:8px}.basket-count{top:12px;right:-3px}}
+@media(max-width:680px){.seed-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.seed-card{min-width:0;min-height:118px;padding:12px}.seed-card.selected{padding:11.5px}.seed-card .seed-thumb{width:58px;height:58px;right:10px;top:8px}.seed-name{font-size:11px}.seed-bottom{font-size:10px}.seed-number{font-size:8px}.seed-card .seed-name{margin-top:42px}.garden-world{height:470px}.garden-scene-bar{padding:9px 11px;gap:9px}.scene-switch button{font-size:10px;min-height:29px}.motion-switch{font-size:9px;padding-left:0;gap:4px}.world-sign{left:12px;top:18px;font-size:9px;max-width:48%;padding:7px 9px;letter-spacing:.3px}.world-weather{right:12px;top:15px;padding:6px 8px;gap:6px}.world-weather b{font-size:10px}.world-weather small{font-size:6px;letter-spacing:.7px}.scene-phase-dot{width:11px;height:11px}.plot-grid{width:min(285px,calc(100% - 28px));top:43%;transform:translate(-50%,-36%)}.plot-label{font-size:9px}.ready-bubble{font-size:9px;padding:4px 6px}.crop-ready:after{right:12px;top:5px;font-size:12px}.companion-corner{width:70px;height:90px;bottom:10px;right:10px}.companion-art{width:76px;height:76px;margin-left:-3px}.companion-touch{font-size:8px;padding:2px 6px;margin-top:-5px}.companion-bubble{right:74px;width:clamp(130px,calc(100vw - 190px),190px);bottom:12px;padding:8px 10px}.companion-bubble p{font-size:10px;line-height:1.7}.companion-caption{font-size:6px;margin-bottom:3px}.harvest-basket{width:51px;height:74px;left:12px;bottom:12px}.harvest-basket svg{width:55px;height:56px}.basket-count{font-size:9px;min-width:18px;height:18px;right:-3px;top:9px}.basket-caption{font-size:7px;letter-spacing:.6px}.sleep-symbol{top:-2px;right:-1px;font-size:13px}.focus-copy p,.panel-empty{font-size:10px}}
+@media(max-width:360px){.garden-world{height:450px}.plant-visual{width:70px;height:83px}.plot-grid{grid-template-rows:repeat(3,70px);gap:9px 7px}.world-sign{font-size:8px;max-width:47%}.world-weather b{font-size:9px}.companion-bubble{width:110px;padding:8px}.companion-bubble p{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.garden-effect{display:none}.garden-world *, .garden-world *:before,.garden-world *:after{animation:none!important;transition:none!important}.firefly{opacity:.35}.drifting-leaf{display:none}}

@@ -5,6 +5,6 @@
   "type": "module",
   "scripts": {
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check dist/app.mjs && node --check dist/music.mjs && node --check dist/sounds.mjs && node --check dist/engine.mjs && node --check dist/orders.mjs && node --check dist/art.mjs && node --test tests/*.test.mjs"
+    "check": "node --check dist/app.mjs && node --check dist/music.mjs && node --check dist/sounds.mjs && node --check dist/garden-life.mjs && node --check dist/engine.mjs && node --check dist/orders.mjs && node --check dist/art.mjs && node --test tests/*.test.mjs"
   }
 }
